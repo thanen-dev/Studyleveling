@@ -1,15 +1,8 @@
-<<<<<<< HEAD
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router";
-import { LogIn, User, Lock, UserPlus } from "lucide-react";
-import supabase from '../../supabaseClient';
-import characterImg from "../../assets/97014d479e747af3339d4cee1583bc5a04df0e98.png";
-=======
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { LogIn, User, Lock, UserPlus } from "lucide-react";
-import characterImg from "figma:asset/97014d479e747af3339d4cee1583bc5a04df0e98.png";
->>>>>>> 4bd76bff8f50d8b37090ad2b1c215b26b77e4420
+import supabase from '../../supabaseClient';
+import characterImg from "../../assets/characterPlaceholder";
 
 interface LoginPageProps {
   onLogin: () => void;
@@ -20,45 +13,32 @@ export function LoginPage({ onLogin }: LoginPageProps) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showWelcomeBack, setShowWelcomeBack] = useState(false);
-  const [isReturning, setIsReturning] = useState(false);
 
-  // Check if user exists in localStorage
   const isReturningUser = (username: string) => {
     return localStorage.getItem(`user_${username}`) !== null;
   };
 
-<<<<<<< HEAD
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (username && password) {
-        const returning = isReturningUser(username);
-        setIsReturning(returning);
+      const returning = isReturningUser(username);
 
-        // Save sign in to Supabase
+      // Save sign in to Supabase (fire and forget — don't block the UI)
+      try {
         await supabase.from('sign_ins').insert({
           user_id: username,
           signed_in_at: new Date().toISOString()
         });
+      } catch {
+        // Non-fatal — continue even if Supabase insert fails
+      }
 
-    // Show welcome popup for ALL users (both new and returning)
-    setShowWelcomeBack(true);
-=======
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (username && password) {
-      const returning = isReturningUser(username);
-      setIsReturning(returning);
-      
-      // Show welcome popup for ALL users (both new and returning)
       setShowWelcomeBack(true);
->>>>>>> 4bd76bff8f50d8b37090ad2b1c215b26b77e4420
-      
-      // If new user, store in localStorage
+
       if (!returning) {
         localStorage.setItem(`user_${username}`, JSON.stringify({ name: username }));
       }
-      
-      // Wait 3 seconds then navigate to portal
+
       setTimeout(() => {
         setShowWelcomeBack(false);
         onLogin();
@@ -76,12 +56,9 @@ export function LoginPage({ onLogin }: LoginPageProps) {
       {/* Welcome Back Popup */}
       {showWelcomeBack && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          {/* Blurred Background */}
           <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-md animate-in fade-in duration-300"></div>
-          
-          {/* Popup Card */}
           <div className="relative z-10 animate-in zoom-in duration-500">
-            <div 
+            <div
               className="relative bg-gradient-to-br from-blue-900/90 via-blue-800/80 to-blue-900/90 backdrop-blur-sm border-2 overflow-hidden"
               style={{
                 clipPath: 'polygon(0 20px, 20px 0, calc(100% - 20px) 0, 100% 20px, 100% calc(100% - 20px), calc(100% - 20px) 100%, 20px 100%, 0 calc(100% - 20px))',
@@ -89,7 +66,6 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                 boxShadow: '0 0 60px rgba(59, 130, 246, 0.5), inset 0 0 80px rgba(59, 130, 246, 0.2)'
               }}
             >
-              {/* Corner Decorations */}
               <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-cyan-400"></div>
               <div className="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-cyan-400"></div>
               <div className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-cyan-400"></div>
@@ -104,12 +80,11 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                     </h2>
                   </div>
                 </div>
-                
+
                 <div className="mb-6">
                   <p className="text-2xl font-semibold text-white">{username}</p>
                 </div>
 
-                {/* Character Avatar */}
                 <div className="flex justify-center mb-6">
                   <div className="relative w-32 h-32 mx-auto mb-8 rounded-full border-4 border-cyan-400/50 overflow-hidden bg-slate-900 shadow-[0_0_50px_rgba(34,211,238,0.4)]">
                     <div className="absolute inset-0 bg-cyan-500/20 blur-sm animate-pulse"></div>
@@ -117,23 +92,12 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                       src={characterImg}
                       alt="Character"
                       className="relative w-full h-full"
-                      style={{
-                        imageRendering: 'pixelated',
-                        objectFit: 'cover',
-                        objectPosition: 'center 20%',
-                        transform: 'scale(2.5)',
-                        transformOrigin: 'center 20%',
-                        mixBlendMode: 'lighten'
-                      }}
+                      style={{ imageRendering: 'pixelated', objectFit: 'contain' }}
                     />
                   </div>
                 </div>
 
-                <p className="text-cyan-400 text-sm tracking-wider">
-                  Loading your portal...
-                </p>
-
-                {/* Loading bar */}
+                <p className="text-cyan-400 text-sm tracking-wider">Loading your portal...</p>
                 <div className="mt-4 w-64 mx-auto h-1 bg-slate-700 rounded-full overflow-hidden">
                   <div className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 animate-pulse" style={{ width: '100%' }}></div>
                 </div>
@@ -144,11 +108,8 @@ export function LoginPage({ onLogin }: LoginPageProps) {
       )}
 
       <div className="relative max-w-md w-full">
-        {/* Outer glow */}
         <div className="absolute inset-0 bg-cyan-500/20 blur-3xl"></div>
-
-        {/* Main Login Box */}
-        <div 
+        <div
           className="relative bg-gradient-to-br from-blue-900/40 via-blue-800/30 to-blue-900/40 backdrop-blur-sm border-2 overflow-hidden"
           style={{
             clipPath: 'polygon(0 20px, 20px 0, calc(100% - 20px) 0, 100% 20px, 100% calc(100% - 20px), calc(100% - 20px) 100%, 20px 100%, 0 calc(100% - 20px))',
@@ -156,7 +117,6 @@ export function LoginPage({ onLogin }: LoginPageProps) {
             boxShadow: '0 0 40px rgba(59, 130, 246, 0.3), inset 0 0 60px rgba(59, 130, 246, 0.1)'
           }}
         >
-          {/* Corner Decorations */}
           <div className="absolute top-0 left-0 w-16 h-16">
             <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-cyan-400"></div>
             <div className="absolute top-1 left-6 w-8 h-0.5 bg-cyan-400"></div>
@@ -178,33 +138,22 @@ export function LoginPage({ onLogin }: LoginPageProps) {
             <div className="absolute bottom-6 right-1 w-0.5 h-8 bg-cyan-400"></div>
           </div>
 
-          {/* Circuit lines */}
           <div className="absolute top-12 left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-400/30 to-transparent"></div>
           <div className="absolute bottom-12 left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-400/30 to-transparent"></div>
 
-          {/* Content */}
           <div className="relative p-8">
-            {/* Header */}
             <div className="text-center mb-8">
               <div className="inline-block relative mb-2">
                 <div className="absolute inset-0 bg-cyan-500 blur-xl opacity-50"></div>
                 <LogIn className="relative w-16 h-16 text-cyan-400 mx-auto" />
               </div>
-              <h2 className="text-3xl font-bold text-white mb-2">
-                STUDENT LOGIN
-              </h2>
-              <p className="text-cyan-400/70 text-sm tracking-wider uppercase">
-                The Elevated Study Experience
-              </p>
+              <h2 className="text-3xl font-bold text-white mb-2">STUDENT LOGIN</h2>
+              <p className="text-cyan-400/70 text-sm tracking-wider uppercase">The Elevated Study Experience</p>
             </div>
 
-            {/* Login Form */}
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Username Input */}
               <div className="space-y-2">
-                <label className="text-xs text-cyan-400 uppercase tracking-wider font-semibold">
-                  Username
-                </label>
+                <label className="text-xs text-cyan-400 uppercase tracking-wider font-semibold">Username</label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <User className="w-5 h-5 text-cyan-400/50" />
@@ -220,11 +169,8 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                 </div>
               </div>
 
-              {/* Password Input */}
               <div className="space-y-2">
-                <label className="text-xs text-cyan-400 uppercase tracking-wider font-semibold">
-                  Password
-                </label>
+                <label className="text-xs text-cyan-400 uppercase tracking-wider font-semibold">Password</label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <Lock className="w-5 h-5 text-cyan-400/50" />
@@ -240,11 +186,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                 </div>
               </div>
 
-              {/* Login Button */}
-              <button
-                type="submit"
-                className="w-full relative group"
-              >
+              <button type="submit" className="w-full relative group">
                 <div className="absolute inset-0 bg-cyan-500 blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
                 <div className="relative bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold py-3 px-6 rounded-lg border-2 border-cyan-400 hover:border-cyan-300 transition-all">
                   <span className="flex items-center justify-center gap-2">
@@ -254,12 +196,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                 </div>
               </button>
 
-              {/* Sign Up Button */}
-              <button
-                type="button"
-                onClick={handleSignUp}
-                className="w-full relative group"
-              >
+              <button type="button" onClick={handleSignUp} className="w-full relative group">
                 <div className="relative bg-slate-800/50 border-2 border-cyan-400/30 hover:border-cyan-400 text-cyan-400 font-semibold py-3 px-6 rounded-lg transition-all">
                   <span className="flex items-center justify-center gap-2">
                     <UserPlus className="w-5 h-5" />
@@ -268,7 +205,6 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                 </div>
               </button>
 
-              {/* Decorative elements */}
               <div className="flex items-center gap-4 text-cyan-400/30 text-xs font-mono mt-6">
                 <div className="flex-1 h-px bg-gradient-to-r from-transparent to-cyan-400/30"></div>
                 <span>LEVEL UP YOUR STUDIES</span>
@@ -277,12 +213,9 @@ export function LoginPage({ onLogin }: LoginPageProps) {
             </form>
           </div>
 
-          {/* Scanline effect */}
-          <div 
+          <div
             className="absolute inset-0 pointer-events-none"
-            style={{
-              background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(59, 130, 246, 0.03) 2px, rgba(59, 130, 246, 0.03) 4px)'
-            }}
+            style={{ background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(59, 130, 246, 0.03) 2px, rgba(59, 130, 246, 0.03) 4px)' }}
           ></div>
         </div>
       </div>

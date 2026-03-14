@@ -1,9 +1,9 @@
 
-<<<<<<< HEAD
+
   # Student Profile Page (Community)
 
   This is a code bundle for Student Profile Page (Community). The original project is available at https://www.figma.com/design/Dj8LfGM5GuJQ8hq6BUL15L/Student-Profile-Page--Community-.
-=======
+
   # Study leveling (Copy)
 
   This is a code bundle for Study leveling (Copy). The original project is available at https://www.figma.com/design/JHBB3nGzWW1UMFIsZXg4AF/Study-leveling--Copy-.

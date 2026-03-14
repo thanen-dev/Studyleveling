@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-import { useState } from "react";
-import { Palette, User, Shirt, Eye } from "lucide-react";
-import characterImg from "../../assets/97014d479e747af3339d4cee1583bc5a04df0e98.png";
-
-export function CharacterCustomizationPage() {
-  const [selectedTab, setSelectedTab] = useState<"skin" | "hair" | "outfit" | "eyes">("skin");
-=======
 import { useState, useRef, useEffect } from "react";
 import { Palette, User, Shirt, Eye } from "lucide-react";
 import { useCharacter } from "../contexts/CharacterContext";
@@ -19,7 +11,6 @@ export function CharacterCustomizationPage() {
   const faceCanvasRef = useRef<HTMLCanvasElement>(null);
   const fullCharacterCanvasRef = useRef<HTMLCanvasElement>(null);
   const [walkFrame, setWalkFrame] = useState(0);
->>>>>>> 4bd76bff8f50d8b37090ad2b1c215b26b77e4420
 
   const customizationOptions = {
     skin: [
@@ -57,32 +48,24 @@ export function CharacterCustomizationPage() {
     { id: "eyes" as const, name: "Eyes", icon: Eye },
   ];
 
-<<<<<<< HEAD
-  return (
-    <div className="w-full max-w-7xl mx-auto p-6">
-=======
   // Draw character face in circle
   useEffect(() => {
     const canvas = faceCanvasRef.current;
     if (!canvas) return;
-
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.imageSmoothingEnabled = false;
 
-    const scale = 40; // Larger scale for face-only view
+    const scale = 40;
 
-    // Skin color - Head
     ctx.fillStyle = characterData.skinColor;
     ctx.fillRect(2 * scale, 1 * scale, 2 * scale, 2 * scale);
 
-    // Hair
     ctx.fillStyle = characterData.hairColor;
     ctx.fillRect(2 * scale, 1 * scale, 2 * scale, 1 * scale);
 
-    // Eyes
     ctx.fillStyle = characterData.eyeColor;
     ctx.fillRect(2 * scale, 2 * scale, 0.5 * scale, 0.5 * scale);
     ctx.fillRect(3.5 * scale, 2 * scale, 0.5 * scale, 0.5 * scale);
@@ -91,52 +74,39 @@ export function CharacterCustomizationPage() {
   // Draw full character for walk-off animation
   useEffect(() => {
     if (!showFullCharacter) return;
-    
     const canvas = fullCharacterCanvasRef.current;
     if (!canvas) return;
-
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     const scale = 27;
-
-    // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.imageSmoothingEnabled = false;
 
     const legOffset = walkFrame === 1 || walkFrame === 3 ? 1 : 0;
 
-    // Skin color - Head
     ctx.fillStyle = characterData.skinColor;
     ctx.fillRect(7 * scale, 2 * scale, 2 * scale, 2 * scale);
 
-    // Hair
     ctx.fillStyle = characterData.hairColor;
     ctx.fillRect(7 * scale, 2 * scale, 2 * scale, 1 * scale);
 
-    // Eyes
     ctx.fillStyle = characterData.eyeColor;
     ctx.fillRect(7 * scale, 3 * scale, 0.5 * scale, 0.5 * scale);
     ctx.fillRect(8.5 * scale, 3 * scale, 0.5 * scale, 0.5 * scale);
 
-    // Shirt
     ctx.fillStyle = characterData.outfit.shirtColor;
     ctx.fillRect(6 * scale, 4 * scale, 4 * scale, 3 * scale);
-
-    // Arms
     ctx.fillRect(5 * scale, 4 * scale, 1 * scale, 2 * scale);
     ctx.fillRect(10 * scale, 4 * scale, 1 * scale, 2 * scale);
 
-    // Hands
     ctx.fillStyle = characterData.skinColor;
     ctx.fillRect(5 * scale, 6 * scale, 1 * scale, 1 * scale);
     ctx.fillRect(10 * scale, 6 * scale, 1 * scale, 1 * scale);
 
-    // Pants
     ctx.fillStyle = characterData.outfit.pantsColor;
     ctx.fillRect(6 * scale, 7 * scale, 4 * scale, 3 * scale);
 
-    // Legs with walking animation
     if (legOffset === 0) {
       ctx.fillRect(6.5 * scale, 10 * scale, 1.5 * scale, 2 * scale);
       ctx.fillRect(8 * scale, 10 * scale, 1.5 * scale, 2 * scale);
@@ -145,17 +115,11 @@ export function CharacterCustomizationPage() {
       ctx.fillRect(8 * scale, 10.5 * scale, 1.5 * scale, 1.5 * scale);
     }
 
-    // Shoes
     ctx.fillStyle = "#1F2937";
     ctx.fillRect(6.5 * scale, 11.5 * scale, 1.5 * scale, 0.5 * scale);
-    if (legOffset === 0) {
-      ctx.fillRect(8 * scale, 11.5 * scale, 1.5 * scale, 0.5 * scale);
-    } else {
-      ctx.fillRect(8 * scale, 11.5 * scale, 1.5 * scale, 0.5 * scale);
-    }
+    ctx.fillRect(8 * scale, 11.5 * scale, 1.5 * scale, 0.5 * scale);
   }, [walkFrame, characterData, showFullCharacter]);
 
-  // Walking animation frames
   useEffect(() => {
     if (isWalkingOff) {
       const interval = setInterval(() => {
@@ -187,16 +151,14 @@ export function CharacterCustomizationPage() {
               height={432}
               className="relative"
             />
-            {/* Shadow */}
             <div className="w-64 h-8 mt-4 bg-black/30 rounded-full blur-md mx-auto"></div>
           </div>
         </motion.div>
       )}
 
->>>>>>> 4bd76bff8f50d8b37090ad2b1c215b26b77e4420
       {/* Header */}
       <div className="relative mb-8">
-        <div 
+        <div
           className="relative bg-gradient-to-br from-blue-900/40 via-blue-800/30 to-blue-900/40 backdrop-blur-sm border-2 overflow-hidden"
           style={{
             clipPath: 'polygon(0 20px, 20px 0, calc(100% - 20px) 0, 100% 20px, 100% calc(100% - 20px), calc(100% - 20px) 100%, 20px 100%, 0 calc(100% - 20px))',
@@ -204,12 +166,10 @@ export function CharacterCustomizationPage() {
             boxShadow: '0 0 40px rgba(59, 130, 246, 0.3), inset 0 0 60px rgba(59, 130, 246, 0.1)'
           }}
         >
-          {/* Corner Decorations */}
           <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-cyan-400"></div>
           <div className="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-cyan-400"></div>
           <div className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-cyan-400"></div>
           <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-cyan-400"></div>
-
           <div className="relative p-8">
             <h1 className="text-3xl font-bold text-white mb-2">CHARACTER CUSTOMIZATION</h1>
             <p className="text-cyan-400 text-sm">Personalize your student avatar</p>
@@ -224,42 +184,22 @@ export function CharacterCustomizationPage() {
             <div className="w-1 h-6 bg-blue-500 rounded"></div>
             Preview
           </h2>
-          
+
           <div className="flex flex-col items-center">
             <div className="relative mb-6">
               <div className="absolute inset-0 bg-cyan-500 rounded-full blur-xl opacity-50 animate-pulse"></div>
-<<<<<<< HEAD
-              <div className="relative w-64 h-64 rounded-full border-4 border-cyan-400/50 overflow-hidden bg-slate-900">
-                <img
-                  src={characterImg}
-                  alt="Character"
-                  className="w-full h-full"
-                  style={{
-                    imageRendering: 'pixelated',
-                    objectFit: 'cover',
-                    objectPosition: 'center 20%',
-                    transform: 'scale(2.5)',
-                    transformOrigin: 'center 20%',
-                    mixBlendMode: 'lighten'
-=======
               <div className="relative w-64 h-64 rounded-full border-4 border-cyan-400/50 overflow-hidden bg-slate-900 flex items-center justify-center">
                 <canvas
                   ref={faceCanvasRef}
                   width={240}
                   height={160}
                   className="scale-150"
-                  style={{
-                    imageRendering: 'pixelated'
->>>>>>> 4bd76bff8f50d8b37090ad2b1c215b26b77e4420
-                  }}
+                  style={{ imageRendering: 'pixelated' }}
                 />
               </div>
-              {/* Pixel grid overlay */}
-              <div 
+              <div
                 className="absolute inset-0 rounded-full pointer-events-none"
-                style={{
-                  background: 'repeating-linear-gradient(0deg, transparent, transparent 4px, rgba(34, 211, 238, 0.05) 4px, rgba(34, 211, 238, 0.05) 8px), repeating-linear-gradient(90deg, transparent, transparent 4px, rgba(34, 211, 238, 0.05) 4px, rgba(34, 211, 238, 0.05) 8px)'
-                }}
+                style={{ background: 'repeating-linear-gradient(0deg, transparent, transparent 4px, rgba(34, 211, 238, 0.05) 4px, rgba(34, 211, 238, 0.05) 8px), repeating-linear-gradient(90deg, transparent, transparent 4px, rgba(34, 211, 238, 0.05) 4px, rgba(34, 211, 238, 0.05) 8px)' }}
               ></div>
             </div>
 
@@ -272,22 +212,14 @@ export function CharacterCustomizationPage() {
               </div>
             </div>
 
-            {/* Save Button */}
-<<<<<<< HEAD
-            <button className="mt-8 w-full relative group">
-              <div className="absolute inset-0 bg-cyan-500 blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
-              <div className="relative bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold py-3 px-6 rounded-lg border-2 border-cyan-400 hover:border-cyan-300 transition-all">
-                Save Changes
-=======
-            <button 
+            <button
               onClick={handleSaveChanges}
-              className="mt-8 w-full relative group"
               disabled={isWalkingOff}
+              className="mt-8 w-full relative group"
             >
               <div className="absolute inset-0 bg-cyan-500 blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
               <div className="relative bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold py-3 px-6 rounded-lg border-2 border-cyan-400 hover:border-cyan-300 transition-all">
                 {isWalkingOff ? "Saving..." : "Save Changes"}
->>>>>>> 4bd76bff8f50d8b37090ad2b1c215b26b77e4420
               </div>
             </button>
           </div>
@@ -300,7 +232,6 @@ export function CharacterCustomizationPage() {
             Customize
           </h2>
 
-          {/* Tabs */}
           <div className="flex gap-2 mb-6 overflow-x-auto">
             {tabs.map((tab) => {
               const Icon = tab.icon;
@@ -321,7 +252,6 @@ export function CharacterCustomizationPage() {
             })}
           </div>
 
-          {/* Options Grid */}
           <div className="space-y-3">
             <h3 className="text-sm text-cyan-400 uppercase tracking-wider font-semibold mb-3">
               Select {selectedTab}
@@ -333,7 +263,7 @@ export function CharacterCustomizationPage() {
                   className="group relative bg-slate-700/30 hover:bg-slate-700/50 border border-slate-600/50 hover:border-cyan-400/50 rounded-lg p-4 transition-all"
                 >
                   <div className="flex items-center gap-3">
-                    <div 
+                    <div
                       className="w-12 h-12 rounded-full border-2 border-cyan-400/30 group-hover:border-cyan-400 transition-colors"
                       style={{ backgroundColor: option.color }}
                     ></div>
@@ -347,7 +277,6 @@ export function CharacterCustomizationPage() {
             </div>
           </div>
 
-          {/* Additional Info */}
           <div className="mt-6 p-4 bg-cyan-500/10 border border-cyan-400/30 rounded-lg">
             <p className="text-sm text-cyan-400">
               💡 Tip: Unlock more customization options by leveling up and completing special tasks!
@@ -357,8 +286,4 @@ export function CharacterCustomizationPage() {
       </div>
     </div>
   );
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 4bd76bff8f50d8b37090ad2b1c215b26b77e4420
