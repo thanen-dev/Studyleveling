@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router";
 import { ChevronLeft, ChevronRight, Check } from "lucide-react";
+import { useCharacter } from "../contexts/CharacterContext";
 
 interface OutfitVariation {
   shirtColor: string;
@@ -18,9 +19,11 @@ const outfitVariations: OutfitVariation[] = [
 
 export function CharacterCreatorPage() {
   const navigate = useNavigate();
+  const { setCharacterData } = useCharacter();
   const [animationStage, setAnimationStage] = useState<"walking-in" | "stopped" | "customizing" | "celebrating" | "walking-out" | "complete">("walking-in");
   const [characterPosition, setCharacterPosition] = useState(-10);
   const [isZooming, setIsZooming] = useState(false);
+  const [characterScale, setCharacterScale] = useState(1);
   const [arrowBounce, setArrowBounce] = useState<'left' | 'right' | null>(null);
   const [walkFrame, setWalkFrame] = useState(0);
   const [currentOutfitIndex, setCurrentOutfitIndex] = useState(0);
@@ -225,22 +228,33 @@ export function CharacterCreatorPage() {
     setIsConfirmed(true);
     setShowArrows(false);
     
+    // Save character data to context
+    setCharacterData({
+      skinColor: '#FFDBAC',
+      hairColor: '#4A3728',
+      eyeColor: '#000000',
+      outfit: outfitVariations[currentOutfitIndex]
+    });
+    
     setAnimationStage("celebrating");
     
     // Jump animation - but keep character in place
     setIsZooming(true);
-    setTimeout(() => setIsZooming(false), 600);
-
-    // After celebration, walk off screen to the right
     setTimeout(() => {
+      setIsZooming(false);
+    }, 600);
+
+    // Wait 1 second after celebration, then shrink and walk off
+    setTimeout(() => {
+      setCharacterScale(0.5);
       setAnimationStage("walking-out");
       setWalkFrame(0);
-      
-      // After walking out, show complete
-      setTimeout(() => {
-        setAnimationStage("complete");
-      }, 2000); // Time for character to walk off screen
-    }, 1500);
+    }, 1600); // 600ms celebration + 1000ms wait
+
+    // After walking out, show complete
+    setTimeout(() => {
+      setAnimationStage("complete");
+    }, 4500); // Extra time for smaller character to walk off
   };
 
   const handleBackToLogin = () => {
@@ -266,10 +280,11 @@ export function CharacterCreatorPage() {
         <>
           {/* Character Container with zoom effect */}
           <div 
-            className="fixed top-1/2 left-1/2 z-50"
+            className="fixed top-1/2 z-50"
             style={{ 
-              transform: `translate(-50%, -50%) scale(${isZooming ? 1.1 : 1})`,
-              transition: 'transform 150ms',
+              left: animationStage === "walking-out" ? `${characterPosition}vw` : '50%',
+              transform: `translate(-50%, -50%) scale(${animationStage === "walking-out" ? characterScale : (isZooming ? 1.1 : 1)})`,
+              transition: animationStage === "walking-out" ? 'transform 100ms, left 0ms' : 'transform 150ms',
               marginTop: '30px'
             }}
           >

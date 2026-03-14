@@ -53,7 +53,7 @@ export function Navigation({ isLoggedIn, onLogout }: NavigationProps) {
               </div>
             )}
             <button 
-              onClick={() => isLoggedIn ? navigate('/portal') : null}
+              onClick={() => navigate('/')}
               className="flex items-center gap-3 cursor-pointer"
             >
               <div className="relative">

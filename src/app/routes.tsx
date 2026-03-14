@@ -1,4 +1,5 @@
 import { createBrowserRouter, Navigate } from "react-router";
+import { LandingPage } from "./components/LandingPage";
 import { LoginPage } from "./components/LoginPage";
 import { StudentProfile } from "./components/StudentProfile";
 import { SettingsPage } from "./components/SettingsPage";
@@ -44,7 +45,7 @@ export const createRouter = (isLoggedIn: boolean, onLogin: () => void, onLogout:
   createBrowserRouter([
     {
       path: "/",
-      element: <Navigate to={isLoggedIn ? "/portal" : "/login"} replace />,
+      element: isLoggedIn ? <Navigate to="/portal" replace /> : <LandingPage />,
     },
     {
       path: "/login",
