@@ -1,8 +1,15 @@
+<<<<<<< HEAD
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { LogIn, User, Lock, UserPlus } from "lucide-react";
 import supabase from '../../supabaseClient';
 import characterImg from "../../assets/97014d479e747af3339d4cee1583bc5a04df0e98.png";
+=======
+import { useState } from "react";
+import { useNavigate } from "react-router";
+import { LogIn, User, Lock, UserPlus } from "lucide-react";
+import characterImg from "figma:asset/97014d479e747af3339d4cee1583bc5a04df0e98.png";
+>>>>>>> 4bd76bff8f50d8b37090ad2b1c215b26b77e4420
 
 interface LoginPageProps {
   onLogin: () => void;
@@ -20,6 +27,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
     return localStorage.getItem(`user_${username}`) !== null;
   };
 
+<<<<<<< HEAD
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (username && password) {
@@ -34,6 +42,16 @@ export function LoginPage({ onLogin }: LoginPageProps) {
 
     // Show welcome popup for ALL users (both new and returning)
     setShowWelcomeBack(true);
+=======
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (username && password) {
+      const returning = isReturningUser(username);
+      setIsReturning(returning);
+      
+      // Show welcome popup for ALL users (both new and returning)
+      setShowWelcomeBack(true);
+>>>>>>> 4bd76bff8f50d8b37090ad2b1c215b26b77e4420
       
       // If new user, store in localStorage
       if (!returning) {

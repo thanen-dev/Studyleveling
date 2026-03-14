@@ -1,9 +1,25 @@
+<<<<<<< HEAD
 import { useState } from "react";
 import { Palette, User, Shirt, Eye } from "lucide-react";
 import characterImg from "../../assets/97014d479e747af3339d4cee1583bc5a04df0e98.png";
 
 export function CharacterCustomizationPage() {
   const [selectedTab, setSelectedTab] = useState<"skin" | "hair" | "outfit" | "eyes">("skin");
+=======
+import { useState, useRef, useEffect } from "react";
+import { Palette, User, Shirt, Eye } from "lucide-react";
+import { useCharacter } from "../contexts/CharacterContext";
+import { motion } from "motion/react";
+
+export function CharacterCustomizationPage() {
+  const { characterData } = useCharacter();
+  const [selectedTab, setSelectedTab] = useState<"skin" | "hair" | "outfit" | "eyes">("skin");
+  const [isWalkingOff, setIsWalkingOff] = useState(false);
+  const [showFullCharacter, setShowFullCharacter] = useState(false);
+  const faceCanvasRef = useRef<HTMLCanvasElement>(null);
+  const fullCharacterCanvasRef = useRef<HTMLCanvasElement>(null);
+  const [walkFrame, setWalkFrame] = useState(0);
+>>>>>>> 4bd76bff8f50d8b37090ad2b1c215b26b77e4420
 
   const customizationOptions = {
     skin: [
@@ -41,8 +57,143 @@ export function CharacterCustomizationPage() {
     { id: "eyes" as const, name: "Eyes", icon: Eye },
   ];
 
+<<<<<<< HEAD
   return (
     <div className="w-full max-w-7xl mx-auto p-6">
+=======
+  // Draw character face in circle
+  useEffect(() => {
+    const canvas = faceCanvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.imageSmoothingEnabled = false;
+
+    const scale = 40; // Larger scale for face-only view
+
+    // Skin color - Head
+    ctx.fillStyle = characterData.skinColor;
+    ctx.fillRect(2 * scale, 1 * scale, 2 * scale, 2 * scale);
+
+    // Hair
+    ctx.fillStyle = characterData.hairColor;
+    ctx.fillRect(2 * scale, 1 * scale, 2 * scale, 1 * scale);
+
+    // Eyes
+    ctx.fillStyle = characterData.eyeColor;
+    ctx.fillRect(2 * scale, 2 * scale, 0.5 * scale, 0.5 * scale);
+    ctx.fillRect(3.5 * scale, 2 * scale, 0.5 * scale, 0.5 * scale);
+  }, [characterData]);
+
+  // Draw full character for walk-off animation
+  useEffect(() => {
+    if (!showFullCharacter) return;
+    
+    const canvas = fullCharacterCanvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const scale = 27;
+
+    // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.imageSmoothingEnabled = false;
+
+    const legOffset = walkFrame === 1 || walkFrame === 3 ? 1 : 0;
+
+    // Skin color - Head
+    ctx.fillStyle = characterData.skinColor;
+    ctx.fillRect(7 * scale, 2 * scale, 2 * scale, 2 * scale);
+
+    // Hair
+    ctx.fillStyle = characterData.hairColor;
+    ctx.fillRect(7 * scale, 2 * scale, 2 * scale, 1 * scale);
+
+    // Eyes
+    ctx.fillStyle = characterData.eyeColor;
+    ctx.fillRect(7 * scale, 3 * scale, 0.5 * scale, 0.5 * scale);
+    ctx.fillRect(8.5 * scale, 3 * scale, 0.5 * scale, 0.5 * scale);
+
+    // Shirt
+    ctx.fillStyle = characterData.outfit.shirtColor;
+    ctx.fillRect(6 * scale, 4 * scale, 4 * scale, 3 * scale);
+
+    // Arms
+    ctx.fillRect(5 * scale, 4 * scale, 1 * scale, 2 * scale);
+    ctx.fillRect(10 * scale, 4 * scale, 1 * scale, 2 * scale);
+
+    // Hands
+    ctx.fillStyle = characterData.skinColor;
+    ctx.fillRect(5 * scale, 6 * scale, 1 * scale, 1 * scale);
+    ctx.fillRect(10 * scale, 6 * scale, 1 * scale, 1 * scale);
+
+    // Pants
+    ctx.fillStyle = characterData.outfit.pantsColor;
+    ctx.fillRect(6 * scale, 7 * scale, 4 * scale, 3 * scale);
+
+    // Legs with walking animation
+    if (legOffset === 0) {
+      ctx.fillRect(6.5 * scale, 10 * scale, 1.5 * scale, 2 * scale);
+      ctx.fillRect(8 * scale, 10 * scale, 1.5 * scale, 2 * scale);
+    } else {
+      ctx.fillRect(6.5 * scale, 10 * scale, 1.5 * scale, 2 * scale);
+      ctx.fillRect(8 * scale, 10.5 * scale, 1.5 * scale, 1.5 * scale);
+    }
+
+    // Shoes
+    ctx.fillStyle = "#1F2937";
+    ctx.fillRect(6.5 * scale, 11.5 * scale, 1.5 * scale, 0.5 * scale);
+    if (legOffset === 0) {
+      ctx.fillRect(8 * scale, 11.5 * scale, 1.5 * scale, 0.5 * scale);
+    } else {
+      ctx.fillRect(8 * scale, 11.5 * scale, 1.5 * scale, 0.5 * scale);
+    }
+  }, [walkFrame, characterData, showFullCharacter]);
+
+  // Walking animation frames
+  useEffect(() => {
+    if (isWalkingOff) {
+      const interval = setInterval(() => {
+        setWalkFrame((prev) => (prev + 1) % 4);
+      }, 200);
+      return () => clearInterval(interval);
+    }
+  }, [isWalkingOff]);
+
+  const handleSaveChanges = () => {
+    setShowFullCharacter(true);
+    setIsWalkingOff(true);
+  };
+
+  return (
+    <div className="w-full max-w-7xl mx-auto p-6 relative overflow-hidden">
+      {/* Full Character Walking Off */}
+      {showFullCharacter && (
+        <motion.div
+          className="fixed inset-0 z-50 pointer-events-none flex items-center"
+          initial={{ x: "50vw" }}
+          animate={{ x: "150vw" }}
+          transition={{ duration: 3, ease: "linear" }}
+        >
+          <div className="relative">
+            <canvas
+              ref={fullCharacterCanvasRef}
+              width={432}
+              height={432}
+              className="relative"
+            />
+            {/* Shadow */}
+            <div className="w-64 h-8 mt-4 bg-black/30 rounded-full blur-md mx-auto"></div>
+          </div>
+        </motion.div>
+      )}
+
+>>>>>>> 4bd76bff8f50d8b37090ad2b1c215b26b77e4420
       {/* Header */}
       <div className="relative mb-8">
         <div 
@@ -77,6 +228,7 @@ export function CharacterCustomizationPage() {
           <div className="flex flex-col items-center">
             <div className="relative mb-6">
               <div className="absolute inset-0 bg-cyan-500 rounded-full blur-xl opacity-50 animate-pulse"></div>
+<<<<<<< HEAD
               <div className="relative w-64 h-64 rounded-full border-4 border-cyan-400/50 overflow-hidden bg-slate-900">
                 <img
                   src={characterImg}
@@ -89,6 +241,16 @@ export function CharacterCustomizationPage() {
                     transform: 'scale(2.5)',
                     transformOrigin: 'center 20%',
                     mixBlendMode: 'lighten'
+=======
+              <div className="relative w-64 h-64 rounded-full border-4 border-cyan-400/50 overflow-hidden bg-slate-900 flex items-center justify-center">
+                <canvas
+                  ref={faceCanvasRef}
+                  width={240}
+                  height={160}
+                  className="scale-150"
+                  style={{
+                    imageRendering: 'pixelated'
+>>>>>>> 4bd76bff8f50d8b37090ad2b1c215b26b77e4420
                   }}
                 />
               </div>
@@ -111,10 +273,21 @@ export function CharacterCustomizationPage() {
             </div>
 
             {/* Save Button */}
+<<<<<<< HEAD
             <button className="mt-8 w-full relative group">
               <div className="absolute inset-0 bg-cyan-500 blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
               <div className="relative bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold py-3 px-6 rounded-lg border-2 border-cyan-400 hover:border-cyan-300 transition-all">
                 Save Changes
+=======
+            <button 
+              onClick={handleSaveChanges}
+              className="mt-8 w-full relative group"
+              disabled={isWalkingOff}
+            >
+              <div className="absolute inset-0 bg-cyan-500 blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
+              <div className="relative bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold py-3 px-6 rounded-lg border-2 border-cyan-400 hover:border-cyan-300 transition-all">
+                {isWalkingOff ? "Saving..." : "Save Changes"}
+>>>>>>> 4bd76bff8f50d8b37090ad2b1c215b26b77e4420
               </div>
             </button>
           </div>
@@ -184,4 +357,8 @@ export function CharacterCustomizationPage() {
       </div>
     </div>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 4bd76bff8f50d8b37090ad2b1c215b26b77e4420

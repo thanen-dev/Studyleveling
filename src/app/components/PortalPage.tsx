@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { BookOpen, CheckSquare, Trophy, User, MessageSquare, FileText, Settings } from "lucide-react";
-import characterImg from "../../assets/97014d479e747af3339d4cee1583bc5a04df0e98.png";
+import characterImg from "figma:asset/97014d479e747af3339d4cee1583bc5a04df0e98.png";
 
 export function PortalPage() {
   const navigate = useNavigate();

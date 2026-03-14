@@ -1,7 +1,6 @@
 import { useNavigate, useLocation } from "react-router";
 import { Home, LogIn, Settings, Bell, MessageCircle, ArrowLeft } from "lucide-react";
-import characterImg from "../../assets/97014d479e747af3339d4cee1583bc5a04df0e98.png";
-
+import characterImg from "figma:asset/97014d479e747af3339d4cee1583bc5a04df0e98.png";
 import { useState } from "react";
 
 interface NavigationProps {
@@ -54,7 +53,7 @@ export function Navigation({ isLoggedIn, onLogout }: NavigationProps) {
               </div>
             )}
             <button 
-              onClick={() => isLoggedIn ? navigate('/portal') : null}
+              onClick={() => navigate('/')}
               className="flex items-center gap-3 cursor-pointer"
             >
               <div className="relative">

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { CharacterModal } from "./CharacterModal";
 import { BookOpen, Award, ExternalLink, Target } from "lucide-react";
+<<<<<<< HEAD
 import characterImg from "../../assets/97014d479e747af3339d4cee1583bc5a04df0e98.png";
 
 export function StudentProfile() {
@@ -19,6 +20,13 @@ export function StudentProfile() {
     });
   }, [xp]);
 
+=======
+import characterImg from "figma:asset/97014d479e747af3339d4cee1583bc5a04df0e98.png";
+
+export function StudentProfile() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+>>>>>>> 4bd76bff8f50d8b37090ad2b1c215b26b77e4420
   const student = {
     name: "Kayley",
     school: "Monash University",
@@ -189,17 +197,29 @@ export function StudentProfile() {
             <div className="mt-6 space-y-2">
               <div className="flex justify-between items-center text-xs text-cyan-400">
                 <span className="font-semibold tracking-wider uppercase">Experience</span>
+<<<<<<< HEAD
                 <span className="font-mono">{xp.toLocaleString()} / 3,000 XP</span>
+=======
+                <span className="font-mono">2,450 / 3,000 XP</span>
+>>>>>>> 4bd76bff8f50d8b37090ad2b1c215b26b77e4420
               </div>
               <div className="relative h-3 bg-slate-800/50 rounded-full overflow-hidden border border-cyan-400/30">
                 <div 
                   className="absolute inset-y-0 left-0 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full transition-all duration-500"
+<<<<<<< HEAD
                   style={{ width: `${(xp / 3000) * 100}%` }}
+=======
+                  style={{ width: '81.67%' }}
+>>>>>>> 4bd76bff8f50d8b37090ad2b1c215b26b77e4420
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse"></div>
                 </div>
                 <div className="absolute inset-0 flex items-center justify-center">
+<<<<<<< HEAD
                   <span className="text-[10px] font-bold text-white drop-shadow-lg">LEVEL {level}</span>
+=======
+                  <span className="text-[10px] font-bold text-white drop-shadow-lg">LEVEL 12</span>
+>>>>>>> 4bd76bff8f50d8b37090ad2b1c215b26b77e4420
                 </div>
               </div>
             </div>
