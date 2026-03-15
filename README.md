@@ -1,6 +1,6 @@
 # Study Leveling
 
-A gamified student portal that turns university life into an RPG. Earn XP, level up, climb the leaderboard, and compete with classmates — all while staying on top of your studies.
+A gamified student portal that turns university life into an RPG. Earn XP, level up, climb the leaderboard, and compete with classmates, all while staying on top of your studies.
 
 ---
 
